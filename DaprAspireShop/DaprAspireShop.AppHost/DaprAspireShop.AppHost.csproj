@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.1" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>a27f2773-6554-42ef-9a87-21b5bb5bc85d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Dapr" Version="9.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DaprAspireShop.CartAPI\DaprAspireShop.CartAPI.csproj" />
+    <ProjectReference Include="..\DaprAspireShop.ProductAPI\DaprAspireShop.ProductAPI.csproj" />
+  </ItemGroup>
+
+</Project>
