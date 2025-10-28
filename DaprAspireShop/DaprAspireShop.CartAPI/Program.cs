@@ -5,13 +5,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
+// ✅ Register Dapr client here
+builder.Services.AddDaprClient();
+
+builder.Services.AddControllers().AddDapr();
 
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-// Configure the HTTP request pipeline.
+app.MapControllers();
+app.UseCloudEvents();
+app.MapSubscribeHandler();
 
 app.UseHttpsRedirection();
 
@@ -32,20 +37,31 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 });
+
+// ✅ Map your endpoint that uses Dapr
 app.MapGet("/cart/add", async ([FromServices] DaprClient client) =>
 {
-    var products = await client.InvokeMethodAsync<List<string>>(
-        HttpMethod.Get,                      // ✅ specify GET
-        "dapraspireshop-productapi",
-        "products");
-
-    // Logic to add a product to the cart
-    return Results.Ok(new
+    try
     {
-        Message = "Product added to cart",
-        Products = products
-    });
+        var products = await client.InvokeMethodAsync<List<string>>(
+            HttpMethod.Get,                      // ✅ specify GET
+            "dapraspireshop-productapi",
+            "products");
+
+        // Logic to add a product to the cart
+        return Results.Ok(new
+        {
+            Message = "Product added to cart",
+            Products = products
+        });
+    }
+    catch (Exception ex)
+    {
+        // Return error details to help diagnose Dapr invocation problems
+        return Results.Problem(detail: ex.ToString(), title: "Dapr invocation failed");
+    }
 });
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

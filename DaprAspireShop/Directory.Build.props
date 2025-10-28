@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Prevent concurrent builds across projects -->
+    <DisableParallelBuilds>true</DisableParallelBuilds>
+  </PropertyGroup>
+</Project>
