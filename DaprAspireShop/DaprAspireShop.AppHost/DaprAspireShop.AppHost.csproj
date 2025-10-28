@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DaprAspireShop.CartAPI\DaprAspireShop.CartAPI.csproj" />
+    <ProjectReference Include="..\DaprAspireShop.CartAPI\DaprAspireShop.CartAPI.csproj" />
     <ProjectReference Include="..\DaprAspireShop.ProductAPI\DaprAspireShop.ProductAPI.csproj" />
   </ItemGroup>
 

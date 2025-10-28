@@ -1,4 +1,5 @@
-using Dapr.Client;
+﻿using Dapr.Client;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +32,10 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 });
-app.MapGet("/cart/add", async (DaprClient client) =>
+app.MapGet("/cart/add", async ([FromServices] DaprClient client) =>
 {
     var products = await client.InvokeMethodAsync<List<string>>(
+        HttpMethod.Get,                      // ✅ specify GET
         "dapraspireshop-productapi",
         "products");
 

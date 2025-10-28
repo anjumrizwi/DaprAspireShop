@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -36,7 +38,12 @@ var products = new List<string>
     "Keyboard",
     "Mouse"
 };
-app.MapGet("/products", () => Results.Ok(products));
+app.MapPost("/products", ([FromBody] List<string> products) =>
+{
+    // process products
+    return Results.Ok(products.Count);
+});
+
 
 app.Run();
 
