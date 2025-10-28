@@ -38,10 +38,12 @@ var products = new List<string>
     "Keyboard",
     "Mouse"
 };
-app.MapPost("/products", ([FromBody] List<string> products) =>
+app.MapGet("/products", () => Results.Ok(products));
+
+// Keep existing POST if you need it
+app.MapPost("/products", ([FromBody] List<string> postedProducts) =>
 {
-    // process products
-    return Results.Ok(products.Count);
+    return Results.Ok(postedProducts.Count);
 });
 
 
