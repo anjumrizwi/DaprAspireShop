@@ -18,14 +18,17 @@ app.MapControllers();
 app.UseCloudEvents();
 app.MapSubscribeHandler();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/cweatherforecast", () =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
@@ -43,10 +46,10 @@ app.MapGet("/cart/add", async ([FromServices] DaprClient client) =>
 {
     try
     {
-        var products = await client.InvokeMethodAsync<List<string>>(
-            HttpMethod.Get,                      // ✅ specify GET
-            "dapraspireshop-productapi",
-            "products");
+        var products = await client.InvokeMethodAsync<ProductResponse>(
+                                HttpMethod.Get, // 👈 this is key
+                                "dapraspireshop-productapi",
+                                "products");
 
         // Logic to add a product to the cart
         return Results.Ok(new
@@ -68,3 +71,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+public record ProductResponse(List<string> Products, DateTime CreatedAt);
